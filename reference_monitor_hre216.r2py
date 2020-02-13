@@ -74,7 +74,7 @@ class ABFile():
     
     # If Bfile is valid, copy Bfile content to Afile
     if (bfile_content[0] == 'S' and bfile_content[-1] == 'E'):
-      self.Afile.close(0
+      self.Afile.close()
       removefile(self.Afn)
       self.Afile = openfile(self.Afn, True)
       self.Afile.writeat(bfile_content, 0)
