@@ -49,7 +49,7 @@ class ABFile():
     mycontext['lock'] = createlock()
 
   def writeat(self, data, offset):
-    mycontext['lock'].acquire()
+    mycontext['lock'].acquire(True)
     try:
       self.Bfile.writeat(data, offset)
       mycontext['lock'].release()
@@ -60,7 +60,7 @@ class ABFile():
       return
   
   def readat(self, bytes, offset):
-    mycontext['lock'].acquire()
+    mycontext['lock'].acquire(True)
     try:
       read_data = self.Afile.readat(bytes, offset)
       mycontext['lock'].release()
