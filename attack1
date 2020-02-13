@@ -5,13 +5,13 @@ if "testfile.txt.b" in listfiles():
 myfile=ABopenfile("testfile.txt",True)  #Create an AB file
 
 # I should get 'SE' when reading an empty file...
-log(assert('SE' == myfile.readat(None,0)))
+assert('SE' == myfile.readat(None,0))
 
 # put some valid data in the file.
 myfile.writeat("Stest12345E",0)
 
 # I should still get 'SE' because the file wasn't closed.
-log(assert('SE' == myfile.readat(None,0)))
+assert('SE' == myfile.readat(None,0))
 
 #Close the file
 myfile.close()
