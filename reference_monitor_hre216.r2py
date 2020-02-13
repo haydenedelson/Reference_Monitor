@@ -45,30 +45,28 @@ class ABFile():
       self.Afile = openfile(self.Afn, False)
       self.Bfile = openfile(self.Bfn, True)
       self.Bfile.writeat(self.Afile.readat(None,0),0)
-  
-    lock = createlock()
 
   def writeat(self, data, offset):
-    lock.acquire(True)
+    mycontext['stoplock'].acquire()
     try:
       self.Bfile.writeat(data, offset)
-      lock.release()
+      mycontext['stoplock'].release()
     
     # Releases lock if exception raised
     except:
-      lock.release()
+      mycontext['stoplock'].release()
       return
   
   def readat(self, bytes, offset):
-    lock.acquire(True)
+    mycontext['stoplock'].acquire()
     try:
       read_data = self.Afile.readat(bytes, offset)
-      lock.release()
+      mycontext['stoplock'].release()
       return read_data
       
     # Releases lock if exception raised, returns nothing
     except:
-      lock.release()
+      mycontext['stoplock'].release()
       return
 
   def close(self):
