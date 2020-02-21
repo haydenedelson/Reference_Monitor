@@ -75,11 +75,15 @@ class ABFile():
     bfile_content = self.Bfile.readat(None, 0)
     
     # If Bfile is valid, copy Bfile content to Afile
-    if (bfile_content[0] == 'S' and bfile_content[-1] == 'E'):
-      self.Afile.close()
-      removefile(self.Afn)
-      self.Afile = openfile(self.Afn, True)
-      self.Afile.writeat(bfile_content, 0)
+    try:
+      if (bfile_content[0] == 'S' and bfile_content[-1] == 'E'):
+        self.Afile.close()
+        removefile(self.Afn)
+        self.Afile = openfile(self.Afn, True)
+        self.Afile.writeat(bfile_content, 0)
+        
+    except:
+      pass
     
     # If Bfile is not valid, do nothing. Close files.
     self.Afile.close()
