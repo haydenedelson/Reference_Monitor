@@ -1,1 +1,113 @@
+"""
+This security layer inadequately handles A/B storage for files in RepyV2.
 
+Note:
+    This security layer uses encasementlib.r2py, restrictions.default, repy.py and Python
+    Also you need to give it an application to run.
+    python repy.py restrictions.default encasementlib.r2py [security_layer].r2py [attack_program].r2py 
+    
+    """ 
+TYPE="type"
+ARGS="args"
+RETURN="return"
+EXCP="exceptions"
+TARGET="target"
+FUNC="func"
+OBJC="objc"
+
+class ABFile():
+
+  def __init__(self,filename,create):
+    # globals
+    mycontext['debug'] = False   
+    # local (per object) reference to the underlying file
+    self.Afn = filename+'.a'
+    self.Bfn = filename+'.b'
+    
+    # Write lock to make writing thread safe
+    self.write_lock = createlock()
+
+    # Make the files and add 'SE' to the readat file
+    if create:
+      # Check if file exists already...if it does and create is passed...assume
+      # File should be deleted and recreated
+      if self.Afn in listfiles():
+        removefile(self.Afn)
+      if self.Bfn in listfiles():
+        removefile(self.Bfn)
+      self.Afile = openfile(self.Afn,create)
+      self.Bfile = openfile(self.Bfn,create)
+      self.Afile.writeat('SE',0)
+    
+  def writeat(self,data,offset):
+    # Write the requested data to the B file using the sandbox's writeat call
+    # Try to acquire write lock...if unavailable wait until write lock is released
+    
+    while not self.write_lock.acquire(True):
+      continue
+    try:
+      # This is not the correct way to do this.  For some reason, every method I know to
+      # truncate bytes from the end of a file is not working in repy.  How can we do this properly?
+      if len(data) < len(self.Bfile.readat(None,0)):
+        self.Bfile.close()
+        removefile(self.Bfn)
+        self.Bfile = openfile(self.Bfn, True)
+      
+      self.Bfile.writeat(data,offset)
+    finally:
+      self.write_lock.release()
+  
+  def readat(self,bytes,offset):
+    # Read from the A file using the sandbox's readat...
+    return self.Afile.readat(bytes,offset)
+
+  def close(self):
+    # Acquire write lock to prevent any concurrent writes to the file during the close process
+    # It was unclear from the documentation whether write_lock.acquire automatically will block and loop trying to acquire
+    # while loop should cover that necessity in either case with minimal performance impact
+    
+    while not self.write_lock.acquire(True):
+      continue
+
+    try:
+      data_file_b = self.Bfile.readat(None,0)
+      data_file_a = self.Afile.readat(None, 0)
+      if self.checkFileValid(data_file_b):
+        self.Afile.writeat(data_file_b, 0)
+    
+    finally:
+      self.Afile.close()
+      self.Bfile.close()
+      
+      # Remove extra file
+      removefile(self.Bfn)
+      self.write_lock.release()
+
+  def checkFileValid(self, data_to_check):
+    # Check if the file data is valid
+    if data_to_check[0] == "S" and data_to_check[-1] == "E":
+      return True
+    else:
+      return False
+
+  def bailout(self, errorRaised):
+    # Bailout function for safe exit
+    log(errorRaised)
+    exitall
+
+def ABopenfile(filename, create):
+  return ABFile(filename,create)
+
+# The code here sets up type checking and variable hiding for you.  You
+# should not need to change anything below here.
+sec_file_def = {"obj-type":ABFile,
+                "name":"ABFile",
+                "writeat":{"type":"func","args":(str,(int,long)),"exceptions":Exception,"return":(int,type(None)),"target":ABFile.writeat},
+                "readat":{"type":"func","args":((int,long,type(None)),(int,long)),"exceptions":Exception,"return":str,"target":ABFile.readat},
+                "close":{"type":"func","args":None,"exceptions":None,"return":(bool,type(None)),"target":ABFile.close}
+           }
+
+CHILD_CONTEXT_DEF["ABopenfile"] = {TYPE:OBJC,ARGS:(str,bool),EXCP:Exception,RETURN:sec_file_def,TARGET:ABopenfile}
+
+# Execute the user code
+secure_dispatch_module()
