@@ -73,7 +73,7 @@ class ABFile():
       data_file_b = self.Bfile.readat(None,0)
       if self.checkFileValid(data_file_b):
         self.Afile.close()
-        removefile(self.Afile)
+        removefile(self.Afn)
         self.Afile = openfile(self.Afn, True)
         self.Afile.writeat(data_file_b, 0)
 
