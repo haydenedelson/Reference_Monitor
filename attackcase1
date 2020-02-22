@@ -1,0 +1,8 @@
+if 'testfile.a' in listfiles():
+  removefile('testfile.a')
+if 'testfile.b' in listfiles():
+  removefile('testfile.b')
+  
+file = ABopenfile('testfile', True)
+assert('SE' == file.readat(None,0))
+log("Testing log function")
