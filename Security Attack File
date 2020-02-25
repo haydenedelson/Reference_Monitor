@@ -15,9 +15,9 @@ file.close()
 file = ABopenfile("secfile.txt", False)
 try:
   assert('SE' == file.readat(None, 0))
+  file.close()
 except:
   log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
-file.close()
 
 # Test Case 2
 # Write almost valid text to file
@@ -37,7 +37,7 @@ file = ABopenfile("secfile.txt", False)
 try:
   assert('SE' == file.readat(None, 0))
 except:
-  log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
+  log(">>>>> SECURITY COMPROMISED: Invalid write operation is not handled properly")
 file.close()
 
 # Reopen file, try different almost valid write
