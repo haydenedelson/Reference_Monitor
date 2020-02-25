@@ -72,7 +72,7 @@ except:
 # Test Case 5
 # Open multiple files at once, conduct multiple write operations at once
 files = [file1, file2, file3, file4, file5]
-filenames = 'testfile1.txt', 'testfile2.txt', 'testfile3.txt', 'testfile4.txt', 'testfile5.txt']
+filenames = ['testfile1.txt', 'testfile2.txt', 'testfile3.txt', 'testfile4.txt', 'testfile5.txt']
 
 try:
   for i in range(5):
