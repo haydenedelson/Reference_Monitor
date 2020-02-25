@@ -83,6 +83,7 @@ try:
   file.writeat('SE', -100)
 except:
   log("Negative index error")
+file.close()
 
 # Test Case 5
 # Write invalid data via a valid variable name
@@ -120,10 +121,15 @@ file = ABopenfile("secfile.txt", True)
 file.writeat("StestE", 0)
 file.close()
 
-# Write to A file
+# Direct to A file
 if "secfile.txt.a" in listfiles():
   try:
-    "secfile.txt.a".writeat("S#hackedE", 0)
+    A_file = ABopenfile("secfile.txt.a", False)
   except:
-    log("Invalid access attempt")
+    log("A file open operation unsuccessful")
+A_file.writeat("S#hackedE, 0)
+A_file.close()
 
+# With statement
+with ABopenfile('secfile.txt.a', False) as A_file:
+  A_file.writeat('S#hackedE', 0)
