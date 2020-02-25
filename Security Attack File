@@ -107,29 +107,3 @@ try:
 except:
   log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
 file.close()
-
-# Test Case 6
-# Write to A file
-# Clean files
-if "secfile.txt.a" in listfiles():
-  removefile("secfile.txt.a")
-if "secfile.txt.b" in listfiles():
-  removefile("secfile.txt.b")
-
-# Regular write operation
-file = ABopenfile("secfile.txt", True)
-file.writeat("StestE", 0)
-file.close()
-
-# Direct to A file
-if "secfile.txt.a" in listfiles():
-  try:
-    A_file = ABopenfile("secfile.txt.a", False)
-  except:
-    log("A file open operation unsuccessful")
-A_file.writeat("S#hackedE, 0)
-A_file.close()
-
-# With statement
-with ABopenfile('secfile.txt.a', False) as A_file:
-  A_file.writeat('S#hackedE', 0)
