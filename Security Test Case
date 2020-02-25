@@ -71,7 +71,6 @@ except:
 
 # Test Case 5
 # Open multiple files at once, conduct multiple write operations at once
-
 try:
   file1 = ABopenfile("testfile1.txt", True)
   file2 = ABopenfile("testfile2.txt", True)
@@ -82,6 +81,7 @@ except:
   log("ACCURACY COMPROMISED: Failed to allow multiple open file operations")
 files = [file1, file2, file3, file4, file5]
 filenames = ['testfile1.txt', 'testfile2.txt', 'testfile3.txt', 'testfile4.txt', 'testfile5.txt']
+
 try:
   for i in range(5):
     files[i].writeat("StestE", 0)
