@@ -71,14 +71,17 @@ except:
 
 # Test Case 5
 # Open multiple files at once, conduct multiple write operations at once
-files = [file1, file2, file3, file4, file5]
-filenames = ['testfile1.txt', 'testfile2.txt', 'testfile3.txt', 'testfile4.txt', 'testfile5.txt']
 
 try:
-  for i in range(5):
-    files[i] = ABopenfile(filenames[i], True)
+  file1 = ABopenfile("testfile1.txt", True)
+  file2 = ABopenfile("testfile2.txt", True)
+  file3 = ABopenfile("testfile3.txt", True)
+  file4 = ABopenfile("testfile4.txt", True)
+  file5 = ABopenfile("testfile5.txt", True)
 except:
   log("ACCURACY COMPROMISED: Failed to allow multiple open file operations")
+files = [file1, file2, file3, file4, file5]
+filenames = ['testfile1.txt', 'testfile2.txt', 'testfile3.txt', 'testfile4.txt', 'testfile5.txt']
 try:
   for i in range(5):
     files[i].writeat("StestE", 0)
@@ -91,11 +94,9 @@ for i in range(5):
 for i in range(5):
   files[i] = ABopenfile(filenames[i], True)
 try:
-for i in range(5):
-  assert("StestE" == files[i].readat(6, 0))
+  for i in range(5):
+    assert("StestE" == files[i].readat(6, 0))
 except:
   log("ACCURACY COMPROMISED: Concurrent valid write operations failed")
 for i in range(5):
   files[i].close()
-
-    
