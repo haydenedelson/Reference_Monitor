@@ -1,0 +1,129 @@
+# Test Case 1
+# Write completely invalid text to file
+# Clean files
+if "secfile.txt.a" in listfiles():
+  removefile("secfile.txt.a")
+if "secfile.txt.b" in listfiles():
+  removefile("secfile.txt.b")
+  
+# Write completely invalid text to file
+file = ABopenfile("secfile.txt", True)
+file.writeat("invalid", 0)
+file.close()
+
+# Check contents -> file should have "SE"
+file = ABopenfile("secfile.txt", False)
+try:
+  assert('SE' == file.readat(None, 0))
+except:
+  log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
+file.close()
+
+# Test Case 2
+# Write almost valid text to file
+# Clean files
+if "secfile.txt.a" in listfiles():
+  removefile("secfile.txt.a")
+if "secfile.txt.b" in listfiles():
+  removefile("secfile.txt.b")
+
+# Write almost valid text to file
+file = ABopenfile("secfile.txt", True)
+file.writeat("S is this valid?", 0)
+file.close()
+
+# Check contents -> file should have "SE"
+file = ABopenfile("secfile.txt", False)
+try:
+  assert('SE' == file.readat(None, 0))
+except:
+  log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
+file.close()
+
+# Reopen file, try different almost valid write
+file = ABopenfile("secfile.txt", False)
+file.writeat("is this valid? EEE", 0)
+file.close()
+
+# Check contents -> file should have "SE"
+file = ABopenfile("secfile.txt", False)
+try:
+  assert('SE' == file.readat(None, 0))
+except:
+  log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
+file.close()
+
+# Test Case 3
+# Write past end of file
+# Clean files
+if "secfile.txt.a" in listfiles():
+  removefile("secfile.txt.a")
+if "secfile.txt.b" in listfiles():
+  removefile("secfile.txt.b")
+
+# Write past end of file
+file = ABopenfile("secfile.txt", True)
+try:
+  file.writeat('SE', 100)
+except:
+  log("Write past EOF error")
+file.close()
+
+# Test Case 4
+# Write before beginning of file
+# Clean files
+if "secfile.txt.a" in listfiles():
+  removefile("secfile.txt.a")
+if "secfile.txt.b" in listfiles():
+  removefile("secfile.txt.b")
+
+# Write before beginning of file
+file = ABopenfile("secfile.txt", True)
+try:
+  file.writeat('SE', -100)
+except:
+  log("Negative index error")
+
+# Test Case 5
+# Write invalid data via a valid variable name
+# Clean files
+if "secfile.txt.a" in listfiles():
+  removefile("secfile.txt.a")
+if "secfile.txt.b" in listfiles():
+  removefile("secfile.txt.b")
+
+# Write invalid data via a valid variable name
+SdataE = "invalid text"
+
+file = ABopenfile("secfile.txt", True)
+file.writeat(SdataE, 0)
+file.close()
+
+# Check contents -> file should have "SE"
+file = ABopenfile("secfile.txt", False)
+try:
+  assert('SE' == file.readat(None, 0))
+except:
+  log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
+file.close()
+
+# Test Case 6
+# Write to A file
+# Clean files
+if "secfile.txt.a" in listfiles():
+  removefile("secfile.txt.a")
+if "secfile.txt.b" in listfiles():
+  removefile("secfile.txt.b")
+
+# Regular write operation
+file = ABopenfile("secfile.txt", True)
+file.writeat("StestE", 0)
+file.close()
+
+# Write to A file
+if "secfile.txt.a" in listfiles():
+  try:
+    "secfile.txt.a".writeat("S#hackedE", 0)
+  except:
+    log("Invalid access attempt")
+
