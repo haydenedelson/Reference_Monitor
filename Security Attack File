@@ -17,7 +17,7 @@ try:
   assert('SE' == file.readat(None, 0))
   file.close()
 except:
-  log("SECURITY COMPROMISED: Invalid write operation is not handled properly\n")
+  log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
   file.close()
 
 # Test Case 2
@@ -39,7 +39,7 @@ try:
   assert('SE' == file.readat(None, 0))
   file.close()
 except:
-  log("SECURITY COMPROMISED: Invalid write operation is not handled properly\n")
+  log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
   file.close()
 
 # Reopen file, try different almost valid write
@@ -53,7 +53,7 @@ try:
   assert('SE' == file.readat(None, 0))
   file.close()
 except:
-  log("SECURITY COMPROMISED: Invalid write operation is not handled properly\n")
+  log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
   file.close()
 
 # Test Case 3
@@ -70,7 +70,7 @@ try:
   file.writeat('SE', 100)
   file.close()
 except:
-  log("Write past EOF error\n")
+  log("Write past EOF error")
   file.close()
 
 # Test Case 4
@@ -87,7 +87,7 @@ try:
   file.writeat('SE', -100)
   file.close()
 except:
-  log("Negative index error\n")
+  log("Negative index error")
   file.close()
 
 # Test Case 5
@@ -111,7 +111,7 @@ try:
   assert('SE' == file.readat(None, 0))
   file.close()
 except:
-  log("SECURITY COMPROMISED: Invalid write operation is not handled properly\n")
+  log("SECURITY COMPROMISED: Invalid write operation is not handled properly")
   file.close()
 
 # Test Case 6
@@ -134,7 +134,7 @@ def file_confusion():
     target.writeat('INVALID DATA', 0)
     target.close()
   except:
-    log("Thread hack failed\n")
+    log("Thread hack failed")
     
 # Attempt normal write operation, call threads, try to facilitate threading error
 file = ABopenfile('testfile.txt', True)
@@ -144,12 +144,12 @@ try:
   for i in range(10):
     createthread(file_confusion)
 except:
-  log("Couldn't create thread\n")
+  log("Couldn't create thread")
 
 try:
   file.close()
 except:
-  log("SECURITY COMPROMISED: File close failed\n")
+  log("SECURITY COMPROMISED: File close failed")
 
 # Wait for threads to finish
 sleep(3)
@@ -159,5 +159,5 @@ try:
   assert('StestE' == file.readat(None, 0))
   file.close()
 except:
-  log("SECURITY COMPROMISED: Allowed invalid write operation with use of threading\n")
+  log("SECURITY COMPROMISED: Allowed invalid write operation with use of threading")
   file.close()
