@@ -70,7 +70,7 @@ try:
   file.writeat('SE', 100)
   file.close()
 except:
-  log("Write past EOF error")
+  log("Invalid Write Operation: SeekPastEndOfFileError")
   file.close()
 
 # Test Case 4
@@ -87,7 +87,7 @@ try:
   file.writeat('SE', -100)
   file.close()
 except:
-  log("Negative index error")
+  log("InvalidWriteOperation: RepyArgumentError")
   file.close()
 
 # Test Case 5
@@ -133,8 +133,16 @@ def file_confusion():
     target = ABopenfile('testfile.txt', False)
     target.writeat('INVALID DATA', 0)
     target.close()
+    
+    # Reopen, check contents -> should have "StestE"
+    target = ABopenfile('testfile.txt', False)
+    try:
+      assert('StestE' == target.readat(None, 0))
+    except:
+      log("SECURITY COMPROMISED: Allowed invalid write operation with use of threading")
+      
   except:
-    log("Thread hack failed")
+    pass
     
 # Attempt normal write operation, call threads, try to facilitate threading error
 file = ABopenfile('testfile.txt', True)
