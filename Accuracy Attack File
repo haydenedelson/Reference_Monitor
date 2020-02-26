@@ -59,7 +59,6 @@ except:
   log("ACCURACY COMPROMISED: Failed to allow (shorter) rewrite operation")
   file.close()
 
-# Test Case 4
 # Rewrite the file with more text
 file = ABopenfile('testfile.txt', False)
 file.writeat('StesttesttestE', 0)
@@ -73,7 +72,7 @@ except:
   log("ACCURACY COMPROMISED: Failed to allow (longer) rewrite operation")
   file.close()
 
-# Test Case 5
+# Test Case 3
 # Open multiple files at once, conduct multiple write operations at once
 filenames = ['testfile1.txt', 'testfile2.txt', 'testfile3.txt', 'testfile4.txt', 'testfile5.txt']
 try:
