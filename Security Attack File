@@ -134,7 +134,7 @@ def file_confusion():
     target.writeat('INVALID DATA', 0)
     target.close()
     
-    # Reopen, check contents -> should have "StestE"
+    # Reopen, check contents -> file should have "StestE"
     target = ABopenfile('testfile.txt', False)
     try:
       assert('StestE' == target.readat(None, 0))
