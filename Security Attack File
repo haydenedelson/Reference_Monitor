@@ -7,7 +7,7 @@ if "testfile.txt.b" in listfiles():
   removefile('testfile.txt.b')
   
 # Write completely invalid text to file
-file = ABopenfile('testfile.txt', True)
+file = ABopenfile('testfpythonile.txt', True)
 file.writeat('invalid', 0)
 file.close()
 
