@@ -2,17 +2,17 @@
 # Attempt normal open/close file operations
 # Clean files
 if "testfile.txt.a" in listfiles():
-  removefile("testfile.txt.a")
+  removefile('testfile.txt.a')
 if "testfile.txt.b" in listfiles():
-  removefile("testfile.txt.b")
+  removefile('testfile.txt.b')
 
 # Attempt normal open/close file operations
 try:
-  file = ABopenfile("textfile.txt", True)
+  file = ABopenfile('textfile.txt', True)
 except:
   log("ACCURACY COMPROMISED: Failed to allow normal open file operation")
 try:
-  assert("SE" == file.readat(None, 0))
+  assert('SE' == file.readat(None, 0))
 except:
   log("ACCURACY COMPROMISED: Failed to write data to blank file")
 try:
@@ -21,70 +21,74 @@ except:
   log("ACCURACY COMPROMISED: Failed to allow normal close file operation")
 
 # Test Case 2
-# Attempt single valid write operation
+# Attempt various rewrite scenarios
 # Clean files
 if "testfile.txt.a" in listfiles():
-  removefile("testfile.txt.a")
+  removefile('testfile.txt.a')
 if "testfile.txt.b" in listfiles():
-  removefile("testfile.txt.b")
+  removefile('testfile.txt.b')
 
 # Attempt valid write operation
-file = ABopenfile("testfile.txt", True)
+file = ABopenfile('testfile.txt', True)
 try:
-  file.writeat("StestE", 0)
+  file.writeat('StestE', 0)
+  file.close()
 except:
   log("ACCURACY COMPROMISED: Failed to allow valid write operation")
-file.close()
+  file.close()
 
 # Reopen, check file contents
-file = ABopenfile("testfile.txt", False)
+file = ABopenfile('testfile.txt', False)
 try:
-  assert("StestE" == file.readat(6, 0))
+  assert('StestE' == file.readat(6, 0))
+  file.close()
 except:
   log("ACCURACY COMPROMISED: Valid write operation failed")
-file.close()
+  file.close()
 
-# Test Case 3
 # Rewrite the file with less text
-file = ABopenfile("testfile.txt", False)
+file = ABopenfile('testfile.txt', False)
 file.writeat("SxxE", 0)
 file.close()
 
-file = ABopenfile("testfile.txt", False)
+file = ABopenfile('testfile.txt', False)
 try:
-  assert("SxxE" == file.readat(4, 0))
+  assert('SxxE' == file.readat(4, 0))
+  file.close()
 except:
   log("ACCURACY COMPROMISED: Failed to allow (shorter) rewrite operation")
-file.close()
+  file.close()
 
 # Test Case 4
 # Rewrite the file with more text
-file = ABopenfile("testfile.txt", False)
-file.writeat("StesttesttestE", 0)
+file = ABopenfile('testfile.txt', False)
+file.writeat('StesttesttestE', 0)
 file.close()
 
-file = ABopenfile("testfile.txt", False)
+file = ABopenfile('testfile.txt', False)
 try:
-  assert("StesttesttestE" == file.readat(14, 0))
+  assert('StesttesttestE' == file.readat(14, 0))
+  file.close()
 except:
   log("ACCURACY COMPROMISED: Failed to allow (longer) rewrite operation")
+  file.close()
 
 # Test Case 5
 # Open multiple files at once, conduct multiple write operations at once
+filenames = ['testfile1.txt', 'testfile2.txt', 'testfile3.txt', 'testfile4.txt', 'testfile5.txt']
 try:
-  file1 = ABopenfile("testfile1.txt", True)
-  file2 = ABopenfile("testfile2.txt", True)
-  file3 = ABopenfile("testfile3.txt", True)
-  file4 = ABopenfile("testfile4.txt", True)
-  file5 = ABopenfile("testfile5.txt", True)
+  file1 = ABopenfile(filenames[0], True)
+  file2 = ABopenfile(filenames[1], True)
+  file3 = ABopenfile(filenames[2], True)
+  file4 = ABopenfile(filenames[3], True)
+  file5 = ABopenfile(filenames[4], True)
 except:
   log("ACCURACY COMPROMISED: Failed to allow multiple open file operations")
 files = [file1, file2, file3, file4, file5]
-filenames = ['testfile1.txt', 'testfile2.txt', 'testfile3.txt', 'testfile4.txt', 'testfile5.txt']
 
 try:
   for i in range(5):
-    files[i].writeat("StestE", 0)
+    files[i].writeat('StestE', 0)
 except:
   log("ACCURACY COMPROMISED: Failed to allow multiple write operations")
 for i in range(5):
@@ -95,7 +99,7 @@ for i in range(5):
   files[i] = ABopenfile(filenames[i], True)
 try:
   for i in range(5):
-    assert("StestE" == files[i].readat(6, 0))
+    assert('StestE' == files[i].readat(6, 0))
 except:
   log("ACCURACY COMPROMISED: Concurrent valid write operations failed")
 for i in range(5):
